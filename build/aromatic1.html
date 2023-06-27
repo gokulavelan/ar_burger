@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Lavazza</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+
+
+	<style>
+		.button {
+			position: absolute;
+			z-index: 2;
+			top: 85%;
+			left: 97px;
+			width: 51%;
+			height: 6%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: white;
+			color: blue;
+			font-weight: bold;
+			display: none;
+		}
+
+		.button1 {
+			position: absolute;
+			z-index: 2;
+			top: 85%;
+			left: 97px;
+			width: 51%;
+			height: 6%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: white;
+			color: blue;
+			font-weight: bold;
+			display: none;
+		}
+
+		.answer {
+			position: absolute;
+			z-index: 2;
+			margin-left: 11%;
+			top: 23%;
+			font-size: 68%;
+		}
+
+		.canswer {
+			position: absolute;
+			z-index: 2;
+			margin-left: 43%;
+			top: 20%;
+		}
+
+		.logo {
+			position: fixed;
+			z-index: 20;
+			left: 37%;
+			top: 6%;
+		}
+
+		.logo1 {
+			position: absolute;
+			z-index: 21;
+		}
+
+		.logotext {
+			color: white;
+			font-size: 66%;
+			margin-left: -26%;
+
+		}
+
+		.ques {
+			position: absolute;
+			z-index: 2;
+			margin-left: 27%;
+			top: 80%;
+			background-color: #f9f9b9;
+			width: 98%;
+			left: -26%;
+		}
+
+		.quesfont {
+			/* position: absolute; */
+			z-index: 2;
+			text-align: center;
+		}
+
+		#cup_position_img {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			height: 100%;
+			width: 100%;
+		}
+
+		#arrow {
+			position: absolute;
+			z-index: 2;
+			margin-left: 44%;
+			top: 96%;
+
+			size: -22%;
+			font-size: 305%;
+			color: black;
+
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<img src="./loading.jpg" id="cup_position_img">
+
+	<div class='logo' id="logo">
+		<img src="./logolavaza.png" width="80" height="33">
+		<br><span class="logotext" id="logotext">LA RESERVA DE iTIERRA! <b>SELECTION</b></span>
+	</div>
+
+	<div class='ques' id="ques" style="display: none;">
+		<h2 class='quesfont' id="ques11" style="color: black;"> QUALE NOTA AROMATICA SENTI <br> TRA QUELLE PROPOSTE
+		</h2>
+		<h2 class='quesfont' id="ques1" style="color: black;display: none;"> CONFERMI LA TUA SCELTA?</h2>
+		<i class="fa fa-arrow-circle-right" id="arrow" style="display: none;"></i>
+	</div>
+
+
+	<script>
+
+
+        function getUrlVars()
+		{
+			var vars = [], hash;
+			var hashes = window.location.href.slice( window.location.href.indexOf( '?' ) + 1 ).split( '&' );
+		}
+
+
+
+
+
+
+		var camera, scene, renderer;
+		var controller;
+		var circle, circle1, circle2, circle3, circle4, circle5, circle6, circle7, material;
+		var material_circle, material_circle1, material_circle2, material_circle3, material_circle4, material_circle5, material_circle6, material_circle7;
+		var whitecircle, whitecircle1, whitecircle2, whitecircle3, whitecircle4, whitecircle5, whitecircle6, whitecircle7;
+		var raycaster, mouse;
+
+		let hitTestSource = null;
+		let hitTestSourceRequested = false;
+		var speed = 0.01;
+		var model;
+		var model1;
+		var model2;
+		var model3;
+		var model5;
+		var group;
+		var mesh;
+		var Caramerotation = false;
+		var Limerotation = false;
+		var Caramel = false;
+		var Lime = false;
+		var Almond = false;
+		var Hazelnuts = false;
+		var rotationflag = true;
+		const intersected = [];
+		var selections = [];
+		var answer = ["Caramel", "Lime"];
+
+		var objects = [];
+		var parent;
+		var smokeParticles = [];
+		var particle;
+
+		var orbitRadius = 0; // for example
+		var date;
+
+		var angle = 0;
+
+		var completed = false;
+		var container;
+		var controls;
+
+
+		var object_key = {
+			"Mesh.003": "Caramel",
+			"Mesh.002": "Caramel",
+			"Mesh.001": "Caramel",
+			"circle": "Caramel",
+		}
+
+		var object_name = ["Almonds", "Lime", "Hazelnuts", "Caramel"];
+		var object_circle = {
+			"Caramel": {
+				"material_circle": material_circle,
+			},
+			"Almonds": {
+				"material_circle": material_circle1,
+			},
+			"Lime": {
+				"material_circle": material_circle2,
+			},
+			"Hazelnuts": {
+				"material_circle": material_circle2,
+			}
+		};
+
+		var manager;
+	</script>
+
+
+	<script type="module">
+
+		import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js';
+		import { ARButton } from './jsm/webxr/ARButton1.js';
+		import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+		import { TTFLoader } from './jsm/loaders/TTFLoader.js';
+		import { FontLoader } from './jsm/loaders/FontLoader.js';
+		import { OrbitControls } from './jsm/controls/OrbitControls.js';
+		import { GUI } from './jsm/libs/dat.gui.module.js';
+
+		init();
+		animate();
+		var smokeTexture, smokeTexture1, smokeTexture2;
+		var smokeMaterial, smokeMaterial1, smokeMaterial2;
+		var smokeGeo, smokeGeo1, smokeGeo2;
+		var particle, particle1, particle2;
+
+		function init() {
+
+			container = document.createElement('div');
+			document.body.appendChild(container);
+
+			scene = new THREE.Scene();
+			raycaster = new THREE.Raycaster();
+			mouse = new THREE.Vector2();
+
+			group = new THREE.Group();
+			scene.add(group);
+
+			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.05, 20);
+
+			var light = new THREE.AmbientLight(0xffffff, 0.5);
+			scene.add(light);
+
+			var light1 = new THREE.PointLight(0xffffff, 0.5);
+			scene.add(light1);
+
+			raycaster = new THREE.Raycaster();
+
+
+			var dirLight = new THREE.DirectionalLight(0xffffff);
+			dirLight.position.set(-3, -10, 10);
+			dirLight.castShadow = true;
+			dirLight.shadow.camera.top = 10;
+			dirLight.shadow.camera.bottom = -10;
+			dirLight.shadow.camera.left = -10;
+			dirLight.shadow.camera.right = 10;
+			dirLight.shadow.camera.near = 0.1;
+			dirLight.shadow.camera.far = 40;
+			scene.add(dirLight);
+
+			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.xr.enabled = true;
+			container.appendChild(renderer.domElement);
+
+			parent = new THREE.Object3D();
+			parent.position.set(0, -1, -1);
+			parent.rotation.set(0, 0, 0);
+			scene.add(parent);
+
+			smokeTexture = THREE.ImageUtils.loadTexture('./correct.png');
+			smokeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, map: smokeTexture });
+			smokeGeo = new THREE.PlaneGeometry(100, 100);
+			particle = new THREE.Mesh(smokeGeo, smokeMaterial);
+			particle.position.set(0, 0.05, -0.1);
+			particle.scale.multiplyScalar(0.0001);
+			particle.visible = false;
+			scene.add(particle);
+
+			smokeTexture1 = THREE.ImageUtils.loadTexture('./wrong.png');
+			smokeMaterial1 = new THREE.MeshLambertMaterial({ color: 0xffffff, map: smokeTexture1, transparent: true });
+			smokeGeo1 = new THREE.PlaneGeometry(100, 100);
+			particle1 = new THREE.Mesh(smokeGeo1, smokeMaterial1);
+			particle1.position.set(0, 0.05, -0.1);
+			particle1.scale.multiplyScalar(0.0001);
+			particle1.visible = false;
+			scene.add(particle1);
+
+			smokeTexture2 = THREE.ImageUtils.loadTexture('./ansdecription.png');
+			smokeMaterial2 = new THREE.MeshLambertMaterial({ color: 0xffffff, map: smokeTexture2, transparent: true });
+			smokeGeo2 = new THREE.PlaneGeometry(100, 100);
+			particle2 = new THREE.Mesh(smokeGeo2, smokeMaterial2);
+			particle2.position.set(0, -0.02, -0.1);
+			particle2.scale.multiplyScalar(0.001);
+			particle2.visible = false;
+			scene.add(particle2);
+
+
+			// controls = new OrbitControls( camera, renderer.domElement );
+			// controls.target.set( 0, - 0.2, - 0.2 );
+			// controls.update();
+
+
+			ObjectLoadingManager();
+			GLTFObjectLoader();
+			
+			CreateCircle();
+
+			renderer.domElement.addEventListener('click', onSelectStart);
+			renderer.domElement.addEventListener('selectstart', onSelectStart);
+		}
+
+		document.getElementById("arrow").addEventListener("click", selection);
+
+		function ARButtonActions() {
+			document.body.appendChild(ARButton.createButton(renderer, {
+				optionalFeatures: ['dom-overlay', 'dom-overlay-for-handheld-ar'],
+				domOverlay: { root: document.body }
+			}));
+			document.getElementById("ARButton").click();
+		}
+
+
+		window.addEventListener('resize', onWindowResize);
+
+		function onSelectStart(event) {
+
+			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+			mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+			raycaster.setFromCamera(mouse, camera);
+
+			const intersections = raycaster.intersectObjects(scene.children, true);
+
+			if (intersections.length > 0) {
+				const intersection = intersections[0];
+				const object = intersection.object;
+
+				if (object.name == "circle") {
+					completed = false;
+					material_circle.color.set(0, 0, 0);
+					model1.scale.set(0.3, 0.3, 0.3);
+					model2.scale.set(0.003, 0.003, 0.003);
+					model3.scale.set(0.03, 0.03, 0.03);
+					model.scale.set(0.01, 0.01, 0.01);
+					document.getElementById("arrow").style.display = "block";
+					document.getElementById("ques1").style.display = "block";
+					document.getElementById("ques11").style.display = "none";
+					selections.push("Caramel");
+					Caramel = true;
+					circle1.visible = false;
+					circle2.visible = false;
+					circle3.visible = false;
+				}
+				else
+					if (object.name == "circle1") {
+						completed = false;
+						//material_circle1.color.set(0, 0, 0);
+						//	model1.visible = false;
+						model2.position.set(0, -0.05, -.2);
+						model1.position.set(-0.07, -0.05, -0.3);
+						model2.scale.set(0.005, 0.005, 0.005);
+						model1.scale.set(0.1, 0.1, 0.1);
+						model3.scale.set(0.03, 0.03, 0.03);
+						model.scale.set(0.01, 0.01, 0.01);
+						circle.position.set(0, 0.02, -.2);
+
+						material_circle.color.set(0, 0, 0);
+						document.getElementById("arrow").style.display = "block";
+						document.getElementById("ques1").style.display = "block";
+						document.getElementById("ques11").style.display = "none";
+						selections.push("Almonds");
+						Almond = true;
+						circle.visible = true;
+						circle2.visible = false;
+						circle3.visible = false;
+						circle1.visible = false;
+					}
+					else
+						if (object.name == "circle2") {
+							completed = false;
+							//material_circle2.color.set(0, 0, 0);
+							//	model1.visible = false;
+							model3.position.set(0, -0.05, -.2);
+							model1.position.set(0.07, -0.06, -0.3);
+							model3.scale.set(0.05, 0.05, 0.05);
+							model1.scale.set(0.1, 0.1, 0.1);
+							model2.scale.set(0.003, 0.003, 0.003);
+							model.scale.set(0.01, 0.01, 0.01);
+							circle.position.set(0, 0.02, -.2);
+							material_circle.color.set(0, 0, 0);
+							document.getElementById("arrow").style.display = "block";
+							document.getElementById("ques1").style.display = "block";
+							document.getElementById("ques11").style.display = "none";
+							selections.push("Lime");
+							Lime = true;
+							circle.visible = true;
+							circle1.visible = false;
+							circle3.visible = false;
+							circle2.visible = false;
+						}
+						else
+							if (object.name == "circle3") {
+								completed = false;
+								model.position.set(0, -0.05, -.2);
+								model1.position.set(0, -0.08, -0.5);
+								model.scale.set(0.015, 0.015, 0.015);
+								model1.scale.set(0.1, 0.1, 0.1);
+								model2.scale.set(0.003, 0.003, 0.003);
+								model3.scale.set(0.03, 0.03, 0.03);
+								material_circle.color.set(0, 0, 0);
+								circle.position.set(0, 0.02, -.1);
+								document.getElementById("arrow").style.display = "block";
+								document.getElementById("ques1").style.display = "block";
+								document.getElementById("ques11").style.display = "none";
+								selections.push("Hazelnuts");
+								Hazelnuts = true;
+								circle.visible = true;
+								circle1.visible = false;
+								circle2.visible = false;
+								circle3.visible = false;
+							}
+
+
+			}
+
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		}
+
+		function animate() {
+
+			renderer.setAnimationLoop(render);
+
+		}
+
+		function render() 
+		{
+			renderer.render(scene, camera);
+		}
+
+		function animationBottomToTop()
+		{
+
+			show3DModel(true);
+
+			setDynamicScale(model1,0.002,0.2);
+			setDynamicScale(model2,0.00004,0.004);
+			setDynamicScale(model3,0.0004,0.04);
+			setDynamicScale(model,0.0002,0.02);
+
+			setDynamicPosition(model1,0.0002,-0.05,'y',"<");
+			setDynamicPosition(model2,0.0002,-0.05,'y',"<");
+			setDynamicPosition(model3,0.0002,-0.06,'y',"<");
+			setDynamicPosition(model,0.0002,-0.08,'y',"<");
+
+			setDynamicPosition(model2,-0.0007,-0.07,'x',">");
+			setDynamicPosition(model3,0.0007,0.07,'x',"<");
+		}
+
+		function setDynamicScale(object3D,value,equal)
+		{
+			if(object3D && object3D.scale.x <= equal) 
+			{
+				object3D.scale.x += value; 
+				object3D.scale.y += value;
+				object3D.scale.z += value; 
+			}
+		}
+		function setDynamicPosition(object3D,value,equal,coordinate,comparison)
+		{
+			if(comparison == ">")
+			{
+				if(object3D && object3D.position[coordinate] >= equal) 
+				{
+					object3D.position[coordinate] += value;
+				}
+			}
+			else 
+			{
+				if(object3D && object3D.position[coordinate] <= equal) 
+				{
+					object3D.position[coordinate] += value;
+				}
+				else
+				{
+					showCircle(true);
+				}
+			}
+		}
+		function showCircle(flag) {
+			circle.visible = flag;
+			circle1.visible = flag;
+			circle2.visible = flag;
+			circle3.visible = flag;
+		}
+		
+		function show3DModel(flag) {
+			if (model1) {
+				model1.visible = flag;
+			}
+			if (model2) {
+				model2.visible = flag;
+			}
+			if (model3) {
+				model3.visible = flag;
+			}
+			if (model) {
+				model.visible = flag;
+			}
+		}
+
+		function ObjectLoadingManager() {
+			manager = new THREE.LoadingManager();
+			manager.onStart = function (url, itemsLoaded, itemsTotal) {
+				console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+			};
+			manager.onLoad = function () {
+
+				console.log('Loading complete!');
+				completed = true;
+			};
+			manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+
+				if (itemsLoaded == itemsTotal) {
+					//document.getElementById("cup_position_img").style.display = "none";
+					document.getElementById("cup_position_img").src = "./completed.png";
+				}
+
+				console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+			};
+			manager.onError = function (url) {
+				console.log('There was an error loading ' + url);
+			};
+		}
+
+		function GLTFObjectLoader() {
+			var loader = new GLTFLoader(manager);
+
+			loader.load('resources/ar/Caramel.glb', function (gltf) {
+				model1 = gltf.scene;
+				model1.scale.set(0.04, 0.04, 0.04);  // 0.2
+				// model1.position.set(0,0,0);
+				model1.position.set(0, -0.10, -0.2);
+				model1.visible = false;
+				scene.add(model1);
+			});
+
+
+			loader.load('resources/ar/newmodel/untitled.gltf', function (gltf) {
+				model2 = gltf.scene;
+				model2.scale.set(0.0008, 0.0008, 0.0008); // 0.004
+				model2.position.set(-0.02, -0.10, -0.3); 
+				model2.visible = false;
+				scene.add(model2);
+			});
+
+
+			loader.load('resources/ar/Lime.glb', function (gltf) {
+				model3 = gltf.scene;
+				model3.scale.set(0.008, 0.008, 0.008);  // 0.04
+				model3.position.set(0.02, -0.11, -0.3);
+				model3.visible = false;
+				scene.add(model3);
+			});
+
+
+			loader.load('resources/ar/Hazelnuts_ok.glb', function (gltf) {
+				model = gltf.scene;
+				model.scale.set(0.004, 0.004, 0.004); // 0.02
+				model.position.set(0, -0.13, -0.5);
+				model.visible = false;
+				scene.add(model);
+			});
+
+			loader.load('./Columbia_Appogg.glb', function (gltf) {
+				model5 = gltf.scene;
+				model5.scale.set(0.8, 0.8, 0.8);
+				model5.position.set(-0.01, -0.3, -0.4);
+				model5.visible = false;
+				scene.add(model5);
+			});
+		}
+
+		function selection() {
+			Caramerotation = true;
+			Limerotation = true;
+			circle1.visible = false;
+			circle2.visible = false;
+			circle3.visible = false;
+			circle.visible = false;
+			
+			particle2.visible = true;
+			
+			document.getElementById("ques").style.display = 'none';
+			
+			if (Caramel && Lime) 
+			{
+				model.visible = false;
+				model2.visible = false;
+				model3.visible = false;
+				model1.visible = false;
+
+				particle.visible = true;
+				model5.visible = true;
+			} 
+			else 
+			{
+
+				particle1.visible = true;
+				model.visible = false;
+				model2.visible = false;
+				model3.visible = false;
+				model1.visible = false;
+				model5.visible = true;
+			}
+
+		}
+
+		function GLTFLoaderRegister(loader_) {
+			loader.register(function (parser) {
+				parser.createUniqueName = function (originalName) { return originalName; };
+				return {
+					name: 'OriginalNamesAndHierarchy', createNodeAttachment: function (nodeIndex) {
+						let nodes = parser.json.nodes, meshes = parser.json.meshes;
+						if (nodes[nodeIndex] && meshes[nodes[nodeIndex].mesh]) {
+							return Promise.resolve(new THREE.Group());
+						}
+					}
+				};
+			});
+		}
+
+		function CreateCircle() {
+			const geometry = new THREE.CircleGeometry(0.013, 100);
+			material = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0, transparent: true, });
+			//Caramel
+			circle = new THREE.Mesh(geometry, material);
+			circle.position.set(0, -0.01, -.2);
+			circle.visible = false;
+			circle.name = "circle";
+			scene.add(circle);
+			//almonds
+			circle1 = new THREE.Mesh(geometry, material);
+			circle1.position.set(-0.07, 0, -0.3);
+			circle1.visible = false;
+			circle1.name = "circle1";
+			group.add(circle1);
+			//lime
+			circle2 = new THREE.Mesh(geometry, material);
+			circle2.position.set(0.08, 0, -0.3);
+			circle2.visible = false;
+			circle2.name = "circle2";
+			group.add(circle2);
+			//Hazelnuts
+			circle3 = new THREE.Mesh(geometry, material);
+			circle3.position.set(0, -0.01, -0.5);
+			circle3.visible = false;
+			circle3.name = "circle3";
+			scene.add(circle3);
+
+
+			const geometry1 = new THREE.CircleGeometry(0.009, 100);
+			material_circle = new THREE.MeshBasicMaterial({ color: 0xffffff });
+			material_circle1 = new THREE.MeshBasicMaterial({ color: 0xffffff });
+			material_circle2 = new THREE.MeshBasicMaterial({ color: 0xffffff });
+			material_circle3 = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+			whitecircle = new THREE.Mesh(geometry1, material_circle);
+			whitecircle.position.set(0, 0, 0);
+			//	whitecircle.name="whitecircle";
+			circle.add(whitecircle);
+			group.add(circle);
+
+
+			whitecircle1 = new THREE.Mesh(geometry1, material_circle1);
+			whitecircle1.position.set(0, 0, 0);
+			//	whitecircle1.name="whitecircle1";
+			circle1.add(whitecircle1);
+			group.add(circle1);
+
+			whitecircle2 = new THREE.Mesh(geometry1, material_circle2);
+			whitecircle2.position.set(0, 0, 0);
+			//	whitecircle2.name="whitecircle2";
+			circle2.add(whitecircle2);
+			group.add(circle2);
+
+			whitecircle3 = new THREE.Mesh(geometry1, material_circle3);
+			whitecircle3.position.set(0, 0, 0);
+			//	whitecircle3.name="whitecircle3";
+			circle3.add(whitecircle3);
+			group.add(circle3);
+
+			scene.add(group);
+		}
+
+		
+
+	</script>
+
+</body>
+
+
+</html>

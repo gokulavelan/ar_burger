@@ -1,0 +1,154 @@
+html,
+body {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+
+@font-face {
+    font-family: GothamMedium;
+    src: url(../fonts/Gotham-Medium.ttf);
+  }
+@font-face {
+    font-family: GothamLight;
+    src: url(../fonts/Gotham-Light.ttf);
+  }
+@font-face {
+    font-family: GothamProLight;
+    src: url(../fonts/Gotham\ Pro\ Light.ttf);
+  }
+@font-face {
+    font-family: GothamProMedium;
+    src: url(../fonts/Gotham\ Pro\ Medium.ttf);
+  }
+@font-face {
+    font-family: GothamBook;
+    src: url(../fonts/Gotham-Book.ttf);
+  }
+@font-face {
+    font-family: GothamProBold;
+    src: url(../fonts/GothamProBold.ttf);
+  }
+@font-face {
+    font-family: GothamBold1;
+    src: url(../fonts/gothambold1.ttf);
+  }
+@font-face {
+    font-family: LavazzaTxtBold;
+    src: url(../fonts/webfontkit-20211017-102810/lavazzatxt-bd-webfont.woff);
+  }
+
+
+.home_icon
+{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    height: 15px;
+}
+
+.arrow_icon
+{
+    height: 60px
+}
+
+.arrow_icon1
+{
+    height: 60px;
+    margin-top: -6px;
+}
+
+#introduction_screen_text 
+{
+    font-family: GothamMedium;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 20%;
+}
+
+.number_text
+{
+    font-family: GothamMedium;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+.line_text
+{
+    font-family: GothamMedium;
+    font-size: 2rem;
+    line-height: 0.5;
+}
+.stage_text 
+{
+    font-family: GothamMedium;
+    margin-top: 20px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+#loader_section
+{
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom: 0;
+    z-index: 999999;
+    /* background-image: linear-gradient(#d8ccA7, #503a30); */
+    text-align: center;
+}
+
+.loading_image
+{
+    top: 10%;
+    width: 70%;
+}
+
+.loading_text
+{
+    font-size: 1.5rem;
+    font-family: GothamMedium;
+}
+
+#ProgressContainer
+{
+    margin: 5% 25%;
+    background: gray;
+    border: 1px solid white;
+}
+
+#myBar 
+{
+    width: 10%;
+    height: 32px;
+    background-color: #04AA6D;
+    text-align: center;
+    line-height: 1.5rem;
+    color: white;
+    font-size: 1.5rem;
+    font-family: GothamMedium;
+}
+
+#myProgress {
+    display: block;
+    z-index: 99999;
+}
+
+@media (orientation: landscape) {
+
+    .loading_image
+    {
+        width: 30%;
+    }
+}
+
+
+

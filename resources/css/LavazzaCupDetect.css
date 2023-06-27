@@ -1,0 +1,217 @@
+html,
+  body {
+    height: 100%;
+    margin: 0;
+    background: black;
+  }
+
+  #c {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  #screenshot {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border: 1px solid gray;
+    cursor: pointer;
+  }
+
+  #screenshot:hover {
+    background: #444;
+  }
+
+  #screenshot:focus {
+    outline: none;
+  }
+
+  .labelspan {
+    position: absolute;
+    left: 226px;
+    top: 177px;
+    color: white;
+    font-size: 39px;
+  }
+
+  #cup_detect_area {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    top: unset;
+    height: 40%;
+    text-align: center;
+    border: 3px solid white;
+    border-radius: 10px;
+    background: transparent;
+    display: block;
+  }
+
+  #cup_detect_section
+  {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    /* background: transparent; */
+    background-image : url('../images/cup_silhouette.png');
+    display: block;
+  }
+
+  #cup_hide {
+    padding-top: 15%;
+    height: 100%;
+    width: 100%;
+  }
+
+  .cup_icon {
+    text-align: center;
+    color: white;
+    font-size: 100px;
+  }
+
+  .text_to_dispaly {
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .sub_title2 
+  {
+    font-size: 44px;
+    font-weight: 700;
+  }
+  .sub_title1 
+  {
+    font-size: 34px;
+  }
+  .main_title2
+  {
+    font-size: 80px;
+    font-weight: 700;
+  }
+  .main_title1
+  {
+    font-size: 34px;
+  }
+
+  .carousel-indicators 
+  {
+    bottom: unset;
+    top: 15%;
+  }
+
+  .logo_section 
+  {
+    position: absolute;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    top: 7%;
+    display: block;
+    height: 100px;
+    background: transparent;
+    text-align: center;
+  }
+
+  .text_to_dispaly
+  {
+    top: 25%;
+    display: block;
+    position: absolute;
+    padding: 0 20%;
+    box-sizing: border-box;
+  }
+
+.logo_image {
+  height: 75px;
+}
+
+.logo_text {
+    color: white;
+    display: block;
+    font-size: 21px;
+    margin-top: 7px;
+}
+
+.carousel-indicators li
+{
+    width: 45px !important;
+    height: 6px !important;
+}
+
+
+.over_lay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 13;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  padding-top: 25%;
+}
+
+#span1 
+{
+    position: fixed;
+    left: 0;
+    top: unset;
+    color: white;
+    font-size: 39px;
+    bottom: 3%;
+    right: 0;
+    display: block;
+    height: 30px;
+    width: 1005;
+    text-align: center;
+    font-weight: 700;
+}
+
+.d-block {
+  height: 100vh;
+}
+
+.question_section {
+  color: white;
+  position: relative;
+  height: inherit;
+  width: inherit;
+  padding-top: 100px;
+}
+
+.question_section>h2 {
+  font-weight: 900;
+  padding: 0 10%;
+}
+
+
+
+  @media only screen and (max-width: 1024px) {
+
+    /* For mobile phones: */
+    [class*="col-"] {
+      max-width: 100% !important;
+      flex: 0 0 100%;
+    }
+
+    .text_to_dispaly {
+      font-size: 42px;
+    }
+
+    .cup_icon {
+      font-size: 230px;
+    }
+  }
