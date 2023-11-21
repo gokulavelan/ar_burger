@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <title>AR Burger</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="google" content="notranslate" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link type="text/css" rel="stylesheet" href="./resources/css/main.css" />
+  <link type="text/css" rel="stylesheet" href="./resources/css/common.css?v=1" />
+  <script src="resources/jquery.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+
+    body 
+    {
+      background-image: linear-gradient(#d8ccA7, #503a30);
+    }
+
+    #footer_section_roast,
+    #footer_section_aromatic,
+    #footer_section_organoleptic {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 60px;
+      top: unset;
+      text-align: center;
+      height: 40px;
+      display: none;
+    }
+
+    #footer_section_aromatic,
+    #footer_section_roast {
+      display: none;
+    }
+
+    #footer_section_aromatic {
+      bottom: 45px;
+      height: auto;
+    }
+
+    #footer_section_organoleptic {
+      bottom: 0;
+      height: 100px;
+    }
+
+    .instruction_text {
+      width: auto;
+      padding: 12px;
+      color: #342012;
+      font-weight: bold;
+      font-size: 13px;
+      background: #e7ddbe;
+      margin: 0 10px;
+      border-radius: 10px;
+      height: 100%;
+      line-height: 1.2;
+      font-family: GothamProBold;
+    }
+
+    .instruction_text_content {
+      width: 70%;
+      float: left;
+      text-align: initial;
+    }
+
+    #confirmtion_btn_id {
+      height: 45px;
+    }
+
+    #confirm_btn {
+      float: right;
+    }
+
+    .bg_remove {
+      background: unset;
+    }
+
+    #confirmtion_btn_id,
+    #navigation_btn_id {
+      display: none;
+    }
+
+    .navigation_btn {
+      font-size: 50px;
+      padding: 2px 18px;
+      line-height: 1;
+      border-radius: 100%;
+      color: brown;
+      background: white;
+      border: unset;
+    }
+
+    #cup_loading_image {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 9999;
+      background: #ac2924;
+    }
+
+    #loading_status {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: unset;
+      bottom: 15%;
+      width: 100%;
+      height: 10%;
+      z-index: 1;
+      font-family: GothamProBold;
+    }
+
+    .home_icon {
+      top: 7%;
+    }
+
+    @media only screen and (max-width: 375px) {
+      .instruction_text {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <img class="home_icon" src="./resources/images/home_dark.png" onselectstart="go_to_home()" onclick="go_to_home()" /> -->
+  <div id="cup_loading_image">
+    <!-- <lottie-player src="./resources/js/burger-animation.json" background="#ac2924" id="cuploading" speed="1"
+      style="width: 100%; height: 100%;width: 100%;position: absolute;top: -10%;" loop autoplay></lottie-player> -->
+    <div id="loading_status" style="z-index: 999; text-align: center; font-size: x-large"></div>
+  </div>
+
+
+<div>
+      <!-- <select id="ingredientDropdown">
+      <option value="patty">Patty</option>
+      <option value="cheese">Cheese</option>
+      <option value="lettuce">Lettuce</option>
+      <option value="ketchup">Ketchup</option>
+      <option value="mustard">Mustard</option>
+      <option value="topBun">Top Bun</option>
+      <option value="onion">Onion</option>
+      <option value="tomatoes">Tomatoes</option>
+    </select> -->
+
+    <button id="addIngredientBtn">Play Animation</button>
+    <!-- <button id="removeIngredientBtn">Remove Ingredient</button> -->
+    </div>
+
+
+
+
+  <script>
+    var stage = "roast";
+
+    var is_xr_present = false;
+
+
+    var camera,
+      scene,
+      renderer,
+      container,
+      raycaster,
+      pivot_point,
+      manager;
+    var mixer;
+    var model_object = {};
+    var model_title = {};
+    var lowerBunModel, lowerBunModelgltf;
+    var clock = null;
+
+    let models = ["patty","cheese","ketchup","mustard","lettuce","tomatoes","pickles","onion","topbun"];
+    const objectsToUpdate = [];
+    var ingredientsGroup;
+    let physicsWorld,lowerBun,cannonDebugRenderer;
+
+
+    var roasting_loaded = false;
+
+
+    // Roasting Section
+
+    var model,
+      flag = true;
+    var i = -1;
+
+    function showLoader( flag, percentage = 0 ) {
+      if ( percentage != 0 ) {
+        document.getElementById( "loading_status" ).innerHTML =
+          "LOADING <br>" + percentage + "%";
+      }
+      if ( percentage == 100 ) {
+        //document.getElementById( "cuploading" ).style.display = "none";
+        document.getElementById( "loading_status" ).innerHTML =
+          "LOADING <br> COMPLETE";
+        document.getElementById( "cup_loading_image" ).style.zIndex = 1;
+      }
+    }
+
+   
+  </script>
+
+    
+  <script type="module">
+      import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js";
+      import { ARButton } from "./jsm/webxr/ARButton.js?v=c1acf1";
+      import { GLTFLoader } from "./jsm/loaders/GLTFLoader.js";
+      import { TTFLoader } from "./jsm/loaders/TTFLoader.js";
+      import { FontLoader } from "./jsm/loaders/FontLoader.js";
+      import { OrbitControls } from "./jsm/controls/OrbitControls.js";  
+      import { GUI } from "./jsm/libs/dat.gui.module.js";
+      import * as CANNON from './builds/cannon-es.js'
+      import CannonDebugger from './builds/cannon-es-debugger.js'
+
+      init();
+      animate();
+
+      // THREE.Cache.enabled = true;
+
+      function init() {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+
+        ingredientsGroup = new THREE.Group();
+
+        scene = new THREE.Scene();
+        raycaster = new THREE.Raycaster();
+
+        camera = new THREE.PerspectiveCamera(
+          70,
+          window.innerWidth / window.innerHeight,
+          0.05,
+          20
+        );
+        clock = new THREE.Clock();
+        var light = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(light);
+
+        var light1 = new THREE.PointLight(0xffffff, 0.5);
+        scene.add(light1);
+
+        raycaster = new THREE.Raycaster();
+
+        var dirLight = new THREE.DirectionalLight(0xffffff);
+        dirLight.position.set(-3, -10, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.top = 10;
+        dirLight.shadow.camera.bottom = -10;
+        dirLight.shadow.camera.left = -10;
+        dirLight.shadow.camera.right = 10;
+        dirLight.shadow.camera.near = 0.1;
+        dirLight.shadow.camera.far = 40;
+        scene.add(dirLight);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.xr.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        pivot_point = new THREE.Object3D();
+        pivot_point.position.set(0, -1, -1);
+        pivot_point.rotation.set(0, 0, 0);
+        scene.add(pivot_point);
+
+         // Physics Configuration
+        physicsWorld = new CANNON.World();
+        physicsWorld.gravity.set(0, -9.8, 0);
+        //physicsWorld.solver.iterations = 20;
+
+        // Ground
+        createGround();
+
+        //Debugger for collision
+        //cannonDebugRenderer = new CannonDebugger(scene, physicsWorld);
+
+
+        scene.add(ingredientsGroup);
+        
+        ObjectLoadingManager();
+        LowerBun();
+        //LoadIngredients();
+        ARButtonActions();
+
+      }
+      //First intantiate the lower model/
+      function LowerBun() {
+        let loader = new GLTFLoader(manager);
+        let roastpath = "resources/3DModels/pump/mv_series.glb";
+        loader.load(
+          roastpath,
+          function (gltf) {
+            lowerBunModel = gltf.scene;
+            lowerBunModelgltf = gltf;
+            lowerBunModel.position.set(0.05, -0.1, -0.4); // 0.2
+            lowerBunModel.scale.set(0.2,0.2,0.2);
+            lowerBunModel.rotation.set(0, 3, 0);
+            lowerBunModel.visible = true;
+            createRigidBody(new CANNON.Cylinder(0.08,0.08,0.015,20), 1, lowerBunModel.position, lowerBunModel.quaternion, lowerBunModel);
+          },
+          function (xhr) {
+            if (xhr.loaded == xhr.total) {
+              showLoader(false, 0);
+            }
+          }
+        );
+      }
+
+      
+      //load all the ingrdients and stored it in the 'model_object' dict. Access it whenever needed.
+      function LoadIngredients(){
+        let loader = new GLTFLoader(manager);
+
+        models.forEach( function (item,index,arr){
+          let path = "resources/3DModels/burger/"+item+".gltf";
+          loader.load(path,function (gltf){
+            model_object[item] = gltf.scene;
+            model_object[item].scale.set(0.01,0.01,0.01);
+            model_object[item].position.set(0.05, -0.1, -0.4);
+            model_object[item].rotation.set(0, 0, 0);
+           })
+        });
+        console.log(model_object);
+      }
+
+      window.addEventListener("resize", onWindowResize);
+
+      //ground
+      function createGround() {
+        const groundShape = new CANNON.Plane();
+        const groundBody = new CANNON.Body({ mass: 0 });
+        groundBody.addShape(groundShape);
+        groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+        groundBody.position.set(0, -0.5, 0);
+        physicsWorld.addBody(groundBody);
+      }
+
+      //creation of rigidbogy for the models with mass/
+      function createRigidBody(shape, mass, pos, quat, model) {
+        const body = new CANNON.Body({ mass: mass });
+        body.addShape(shape);
+        body.position.set(pos.x, pos.y, pos.z);
+        body.quaternion.set(quat.x, quat.y, quat.z, quat.w);
+        body.allowSleep = true;
+        physicsWorld.addBody(body);
+        model.userData.physicsBody = body;
+        objectsToUpdate.push({ mesh: model, body: body });
+        //console.log(model);
+        ingredientsGroup.add(model);
+      }
+
+      //TO simulate the falling and physicsworld
+      function updatePhysics() {
+        physicsWorld.step(1 / 360);
+
+        for (const obj of objectsToUpdate) {
+          const mesh = obj.mesh;
+          const body = obj.body;
+          mesh.position.copy(body.position);
+          mesh.quaternion.copy(body.quaternion);
+        }
+      }
+
+
+      function ObjectLoadingManager() {
+        manager = new THREE.LoadingManager();
+
+        manager.onStart = function (url, itemsLoaded, itemsTotal) {
+          // console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+        };
+
+        manager.onLoad = function () {
+          console.log("Loading complete!");
+
+          if (roasting_loaded) {
+            showLoader(false, 0);
+          }
+        };
+        manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+          if (!roasting_loaded) {
+            console.log(Math.trunc((itemsLoaded / itemsTotal) * 100));
+            showLoader(false, Math.trunc((itemsLoaded / itemsTotal) * 100));
+          }
+          if (itemsLoaded == itemsTotal) {
+            console.log("status", roasting_loaded);
+          }
+        };
+        manager.onError = function (url) {};
+      }
+
+
+
+      // Customization Functions
+      function addIngredient(ingredient) {
+        let ingredientModel;
+        let ingredientRigidVec3;
+        let height = 0;
+        // Create geometry and material based on the selected ingredient
+        switch (ingredient) {
+          case 'patty':
+            ingredientModel = model_object["patty"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.08, 0.005, 0.08);
+            height= 0.02;
+            break;
+          case 'lettuce':
+            ingredientModel = model_object["lettuce"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.08, 0.005, 0.08);
+            height= 0.01;
+            break;
+          case 'ketchup':
+            ingredientModel = model_object["ketchup"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.1, 0.005, 0.1);
+            height= 0.01;
+            break;
+          case 'mustard':
+            ingredientModel = model_object["mustard"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.1, 0.005, 0.1);
+            height= 0.01;
+            break;
+          case 'topBun':
+            ingredientModel = model_object["topbun"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.1, 0.008, 0.1);
+            height= 0.02;
+            break;
+          case 'onion':
+            ingredientModel = model_object["onion"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.1, 0.01, 0.1);
+            height= 0.01;
+            break;
+          case 'tomatoes':
+            ingredientModel = model_object["tomatoes"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.1, 0.01, 0.1);
+            height= 0.01;
+            break;
+          case 'cheese':
+            ingredientModel = model_object["cheese"];
+            ingredientRigidVec3 = new CANNON.Vec3(0.08, 0.005, 0.08);
+            height= 0.01;
+            break;
+          default:
+            return; // No ingredient selected
+        }
+
+        // Create the ingredient mesh
+        ingredientModel.position.set(0.05, -0.1, -0.4);
+        ingredientModel.position.y = 1;
+        ingredientModel.scale.set(0.01,0.01,0.01);
+        
+        //console.log(ingredientModel);
+        createRigidBody(new CANNON.Cylinder(0.08,0.08,height,20), 1, ingredientModel.position, ingredientModel.quaternion, ingredientModel);
+      }
+      
+
+      //Remove the last added model.
+      function removeIngredient() {
+        if (ingredientsGroup.children.length > 0) {
+          const ingredient = ingredientsGroup.children[ingredientsGroup.children.length - 1];
+          ingredientsGroup.remove(ingredient);
+          physicsWorld.removeBody(ingredient.userData.physicsBody);
+          ingredientCount--;
+        }
+      }
+
+      //  AR Button Section
+
+      function ARButtonActions() {
+        document.body.appendChild(
+          ARButton.createButton(renderer, {
+            optionalFeatures: ["dom-overlay", "dom-overlay-for-handheld-ar"],
+            domOverlay: { root: document.body },
+          })
+        );
+        document.getElementById("ARButton").click();
+      }
+
+
+      // Animation Section
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+
+      function animate() {
+        var dt = clock.getDelta();
+			  if ( mixer ) mixer.update( dt );
+        requestAnimationFrame( animate );
+        renderer.setAnimationLoop(render);
+      }
+      
+
+      function render() {
+        if (renderer.xr.isPresenting) 
+        {
+          is_xr_present = true;
+          document.getElementById("cup_loading_image").style.display = "none";
+          
+        } else {
+          if (is_xr_present == true) {
+            window.location.href = "./home.html";
+          }
+        }
+        updatePhysics();
+        
+        //debug with wireframe
+        //cannonDebugRenderer.update();
+
+        renderer.render(scene, camera);
+      }
+
+      function initApp() {
+        //const ingredientDropdown = document.getElementById('ingredientDropdown');
+        const addIngredientBtn = document.getElementById('addIngredientBtn');
+        //const removeIngredientBtn = document.getElementById('removeIngredientBtn');
+
+        // Add event listener to the "Add Ingredient" button
+        addIngredientBtn.addEventListener('click', function () {
+          // const selectedIngredient = ingredientDropdown.value;
+          // addIngredient(selectedIngredient);
+          //alert("check");
+          mixer = new THREE.AnimationMixer(lowerBunModelgltf.scene);
+
+          // Get all animation clips
+          console.log(mixer);
+          
+          if (lowerBunModelgltf.animations && lowerBunModelgltf.animations.length > 0) {
+            console.log(lowerBunModelgltf.animations);
+            for (let i = 0; i < lowerBunModelgltf.animations.length; i++) {
+
+              const animationClip = lowerBunModelgltf.animations[i];
+              const action = mixer.clipAction(animationClip);
+              console.log(`Animation ${i + 1}: Name - ${animationClip.name}, Duration - ${animationClip.duration}`);
+      
+              // Set the action to play just once
+              action.setLoop(THREE.LoopOnce);
+              action.clampWhenFinished = true;
+
+              // Play the action
+              action.play();
+            }
+          }
+        });
+
+        // Add event listener to the "Remove Ingredient" button
+       // removeIngredientBtn.addEventListener('click', removeIngredient);
+      }
+
+      initApp();
+    </script>
+</body>
+
+</html>
